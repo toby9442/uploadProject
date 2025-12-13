@@ -16,14 +16,12 @@ $query = $connect->prepare('INSERT INTO `files` (`id`,`fileBlob`,`name`,`mtype`,
 $query->bind_param("sssss",$egg,$file,$croissant,$_FILES['file']['type'],$_POST['tag']);
 try {
 $query->execute();
-$connect->execute_query("INSERT INTO `logs` (`action`,`account`) VALUES(CONCAT('Uploaded file ',?),?)",[$croissant,$_COOKIE['user']]);
+if ($logLevel>=2) $connect->execute_query("INSERT INTO `logs` (`action`,`account`) VALUES(CONCAT('Uploaded file ',?),?)",[$croissant,$_COOKIE['user']]);
 header("Location: findui.php?filename=".$croissant);
 } catch(Exception $e) {
-    $connect->execute_query("INSERT INTO `logs` (`action`) VALUES(CONCAT('Failed to upload file ',?))",[$croissant,$_COOKIE['user']]);
+    if ($logLevel>=0) $connect->execute_query("INSERT INTO `logs` (`account`,`action`) VALUES(?,CONCAT('Failed to upload file ',?,' because ',?,' occured.'))",[$_COOKIE['user'],$croissant,$e->getMessage()]);
     if (strpos("a".$e->getMessage(),"Duplicate entry")) {
         header("Location: uploadui.php?error=duplicate");
-    } else {
-        echo $e->getMessage();
     }
 }
 unlink("temp/".$_FILES['file']['name']);

@@ -14,12 +14,12 @@ include "config.php";
 if ($_GET['tag']) {
     echo "<a href='searchTag.php?tag=".htmlspecialchars(urldecode($_GET['tag']))."'>Back</a><br>";
     $data = $connect->execute_query("SELECT `name`, `mtype` FROM `files` WHERE `tag`= ? ORDER BY `goldenFile` DESC",[urldecode($_GET['tag'])]);
-        $connect->execute_query("INSERT INTO `logs` (`action`) VALUES(CONCAT('Viewed gallery ',?))",[urldecode($_GET['tag'])]);
+    if ($logLevel>=2) $connect->execute_query("INSERT INTO `logs` (`action`) VALUES(CONCAT('Viewed gallery ',?))",[urldecode($_GET['tag'])]);
     echo "<fieldset><legend>Images Tagged With <b>".htmlspecialchars(urldecode($_GET['tag']))."</b></legend>";
 } else {
     echo "<a href='uploadui.php' >Back</a><br>";
     $data = $connect->execute_query("SELECT `name`, `mtype` FROM `files` ORDER BY `goldenFile` DESC");
-    $connect->execute_query("INSERT INTO `logs` (`action`) VALUES('Viewed gallery')");
+    if ($logLevel>=2) $connect->execute_query("INSERT INTO `logs` (`action`) VALUES('Viewed gallery')");
     echo "<fieldset><legend>All images</legend>";
 }
 

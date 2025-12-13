@@ -79,9 +79,9 @@ echo "We currently have a total of <b id='fileCount'>-</b> files uploaded, which
 try {
 $getData = "SELECT `name`, `goldenFile` FROM `files` ORDER BY `goldenFile` DESC";
 $data = $connect->query($getData);
-echo "<fieldset><legend>All Files <a  href='gallery.php'>Visit The Gallery</a></legend>";
+echo "<fieldset><legend>All Files <a href='gallery.php'>Visit The Gallery</a></legend>";
 displayList($data);
-echo "Version <b>1.3.0</b>";
+echo "Version <b>1.3.1</b>";
 } catch(Exception) {
     displayError($e);
 }
